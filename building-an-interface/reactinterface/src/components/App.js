@@ -8,8 +8,37 @@ class App extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			myName: "Clinton",
+			myAppts: [],
 		};
+		this.deleteAppointment = this.deleteAppointment.bind(this);
+	}
+
+	componentDidMount() {
+		fetch("./data.json")
+			.then((response) => response.json())
+			.then((result) => {
+				const appts = result.map((item, index) => {
+					item.key = index;
+					return item;
+				});
+				this.setState({
+					myAppts: appts,
+				});
+			});
+	}
+
+	// deleteAppointment(apt) {
+	// 	let appts = this.state.myAppts;
+	// 	appts = without(appts, apt);
+	// 	this.setState({
+	// 		myAppts: appts,
+	// 	});
+	// }
+
+	deleteAppointment(key) {
+		this.setState({
+			myAppts: this.state.myAppts.filter((appt) => appt.key !== key),
+		});
 	}
 
 	render() {
@@ -19,10 +48,12 @@ class App extends Component {
 					<div className="row">
 						<div className="col-md-12 bg-white">
 							<div className="container">
-								{this.state.myName}
 								<AddAppointments />
 								<SearchAppointments />
-								<ListAppointments />
+								<ListAppointments
+									appointments={this.state.myAppts}
+									deleteAppointment={this.deleteAppointment}
+								/>
 							</div>
 						</div>
 					</div>
