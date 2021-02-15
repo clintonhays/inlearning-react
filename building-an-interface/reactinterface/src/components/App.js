@@ -9,36 +9,52 @@ class App extends Component {
 		super(props);
 		this.state = {
 			myAppts: [],
+			formDisplay: false,
+			apptKey: 0,
 		};
 		this.deleteAppointment = this.deleteAppointment.bind(this);
+		this.toggleFormDisplay = this.toggleFormDisplay.bind(this);
+		this.addNewAppt = this.addNewAppt.bind(this);
 	}
 
 	componentDidMount() {
 		fetch("./data.json")
 			.then((response) => response.json())
 			.then((result) => {
-				const appts = result.map((item, index) => {
-					item.key = index;
+				const appts = result.map((item) => {
+					item.key = this.state.apptKey;
+					this.setState((prevState) => ({
+						apptKey: prevState.apptKey + 1,
+					}));
 					return item;
 				});
-				this.setState({
+				this.setState((prevState) => ({
 					myAppts: appts,
-				});
+					apptKey: prevState.apptKey + 1,
+				}));
 			});
 	}
-
-	// deleteAppointment(apt) {
-	// 	let appts = this.state.myAppts;
-	// 	appts = without(appts, apt);
-	// 	this.setState({
-	// 		myAppts: appts,
-	// 	});
-	// }
 
 	deleteAppointment(key) {
 		this.setState({
 			myAppts: this.state.myAppts.filter((appt) => appt.key !== key),
 		});
+	}
+
+	toggleFormDisplay() {
+		this.setState({
+			formDisplay: !this.state.formDisplay,
+		});
+	}
+
+	addNewAppt(newAppt) {
+		const appts = this.state.myAppts;
+		newAppt.key = this.state.apptKey;
+		appts.unshift(newAppt);
+		this.setState((prevState) => ({
+			myAppts: appts,
+			apptKey: prevState.apptKey + 1,
+		}));
 	}
 
 	render() {
@@ -48,7 +64,11 @@ class App extends Component {
 					<div className="row">
 						<div className="col-md-12 bg-white">
 							<div className="container">
-								<AddAppointments />
+								<AddAppointments
+									formDisplay={this.state.formDisplay}
+									toggleFormDisplay={this.toggleFormDisplay}
+									addNewAppt={this.addNewAppt}
+								/>
 								<SearchAppointments />
 								<ListAppointments
 									appointments={this.state.myAppts}
