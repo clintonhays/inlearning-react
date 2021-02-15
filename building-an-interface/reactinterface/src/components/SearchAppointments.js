@@ -3,8 +3,87 @@ import React, { Component } from "react";
 export class SearchAppointments extends Component {
 	render() {
 		return (
-			<div>
-				<h1>Search Appointments</h1>
+			<div className="search-appointments row justify-content-center my-4">
+				<div className="col-md-6">
+					<div className="input-group">
+						<input
+							id="SearchApts"
+							type="text"
+							className="form-control"
+							aria-label="Search Appointments"
+						/>
+						<div className="input-group-append">
+							<button
+								type="button"
+								className="btn btn-primary dropdown-toggle"
+								data-toggle="dropdown"
+								aria-haspopup="true"
+								aria-expanded="false"
+							>
+								Sort by: <span className="caret" />
+							</button>
+
+							<div className="sort-menu dropdown-menu dropdown-menu-right">
+								<button
+									className={`sort-by dropdown-item ${
+										this.props.orderBy === "petName" ? "active" : ""
+									}`}
+									onClick={(e) =>
+										this.props.changeOrderBy("petName", this.props.orderDir)
+									}
+									href="#"
+								>
+									Pet Name
+								</button>
+								<button
+									className={`sort-by dropdown-item ${
+										this.props.orderBy === "aptDate" ? "active" : ""
+									}`}
+									onClick={(e) =>
+										this.props.changeOrderBy("aptDate", this.props.orderDir)
+									}
+									href="#"
+								>
+									Date
+								</button>
+								<button
+									className={`sort-by dropdown-item ${
+										this.props.orderBy === "ownerName" ? "active" : ""
+									}`}
+									onClick={(e) =>
+										this.props.changeOrderBy("ownerName", this.props.orderDir)
+									}
+									href="#"
+								>
+									Owner
+								</button>
+								<div role="separator" className="dropdown-divider" />
+								<button
+									className={`sort-by dropdown-item ${
+										this.props.orderDir === "asc" ? "active" : ""
+									}`}
+									onClick={(e) =>
+										this.props.changeOrderDir("asc", this.props.orderBy)
+									}
+									href="#"
+								>
+									Asc
+								</button>
+								<button
+									className={`sort-by dropdown-item ${
+										this.props.orderDir === "desc" ? "active" : ""
+									}`}
+									onClick={(e) =>
+										this.props.changeOrderDir("desc", this.props.orderBy)
+									}
+									href="#"
+								>
+									Desc
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
 		);
 	}
