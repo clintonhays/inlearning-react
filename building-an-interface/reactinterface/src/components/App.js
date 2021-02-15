@@ -12,6 +12,7 @@ class App extends Component {
 			formDisplay: false,
 			orderBy: "petName",
 			orderDir: "asc",
+			searchText: "",
 			apptKey: 0,
 		};
 		this.deleteAppointment = this.deleteAppointment.bind(this);
@@ -19,6 +20,7 @@ class App extends Component {
 		this.addNewAppt = this.addNewAppt.bind(this);
 		this.changeOrderBy = this.changeOrderBy.bind(this);
 		this.changeOrderDir = this.changeOrderDir.bind(this);
+		this.searchAppts = this.searchAppts.bind(this);
 	}
 
 	componentDidMount() {
@@ -75,6 +77,12 @@ class App extends Component {
 		});
 	}
 
+	searchAppts(input) {
+		this.setState({
+			searchText: input,
+		});
+	}
+
 	render() {
 		let order;
 		let sortedAppts = this.state.myAppts;
@@ -85,16 +93,30 @@ class App extends Component {
 			order = -1;
 		}
 
-		sortedAppts.sort((a, b) => {
-			if (
-				a[this.state.orderBy].toLowerCase() <
-				b[this.state.orderBy].toLowerCase()
-			) {
-				return -1 * order;
-			} else {
-				return 1 * order;
-			}
-		});
+		sortedAppts = sortedAppts
+			.sort((a, b) => {
+				if (
+					a[this.state.orderBy].toLowerCase() <
+					b[this.state.orderBy].toLowerCase()
+				) {
+					return -1 * order;
+				} else {
+					return 1 * order;
+				}
+			})
+			.filter((appt) => {
+				return (
+					appt.petName
+						.toLowerCase()
+						.includes(this.state.searchText.toLowerCase()) ||
+					appt.ownerName
+						.toLowerCase()
+						.includes(this.state.searchText.toLowerCase()) ||
+					appt.aptNotes
+						.toLowerCase()
+						.includes(this.state.searchText.toLowerCase())
+				);
+			});
 
 		return (
 			<main className="page bg-white" id="petratings">
@@ -112,6 +134,7 @@ class App extends Component {
 									orderDir={this.state.orderDir}
 									changeOrderBy={this.changeOrderBy}
 									changeOrderDir={this.changeOrderDir}
+									searchAppts={this.searchAppts}
 								/>
 								<ListAppointments
 									appointments={sortedAppts}
