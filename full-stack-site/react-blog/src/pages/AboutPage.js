@@ -1,9 +1,9 @@
 import React from "react";
 
-const HomePage = () => {
+const AboutPage = () => {
 	return (
 		<>
-			<h1>Welcome to my Blog</h1>
+			<h1>About</h1>
 			<p>
 				Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolores
 				tenetur perferendis nostrum maxime cumque saepe aspernatur sapiente?
@@ -26,4 +26,4 @@ const HomePage = () => {
 	);
 };
 
-export default HomePage;
+export default AboutPage;
