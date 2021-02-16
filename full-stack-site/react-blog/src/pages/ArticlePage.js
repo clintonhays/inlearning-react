@@ -1,13 +1,14 @@
 import React from "react";
 import ArticlesList from "./components/ArticlesList";
 import articleContent from "./article-content";
+import NotFound from "./NotFound";
 
 const ArticlePage = ({ match }) => {
 	const name = match.params.title;
 	const article = articleContent.find((article) => article.name === name);
 
 	if (!article) {
-		return <h1>This page does not exist!</h1>;
+		return <NotFound />;
 	}
 
 	const otherArticles = articleContent.filter(
@@ -20,6 +21,7 @@ const ArticlePage = ({ match }) => {
 				<p key={key}>{p}</p>
 			))}
 
+			<h3>Other Articles:</h3>
 			<ArticlesList articles={otherArticles} />
 		</>
 	);
