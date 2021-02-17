@@ -1,18 +1,18 @@
 import express from "express";
 import bodyParser from "body-parser";
 
-const upvotes = {
+const articleInfo = {
 	"learn-react": {
 		upvotes: 0,
-		comment: "",
+		comments: [],
 	},
 	"learn-node": {
 		upvotes: 0,
-		comment: "",
+		comments: [],
 	},
 	"my-thoughts-on-resumes": {
 		upvotes: 0,
-		comment: "",
+		comments: [],
 	},
 };
 
@@ -23,10 +23,20 @@ app.use(bodyParser.json());
 app.post("/api/articles/:name/upvote", (req, res) => {
 	const articleName = req.params.name;
 
-	upvotes[articleName].upvotes += 1;
+	articleInfo[articleName].upvotes += 1;
 	res
 		.status(200)
-		.send(`${articleName} now has ${upvotes[articleName].upvotes} upvotes!!`);
+		.send(
+			`${articleName} now has ${articleInfo[articleName].upvotes} upvotes!!`
+		);
+});
+app.post("/api/articles/:name/add-comment", (req, res) => {
+	const { username, text } = req.body;
+	const articleName = req.params.name;
+
+	articleInfo[articleName].comments.push({ username, text });
+
+	res.status(200).send(articleInfo[articleName]);
 });
 
 app.listen(8000, () => {
